@@ -5,29 +5,28 @@ import React
 
 @objc(Consentmanager)
 class Consentmanager: RCTEventEmitter {
-    
+
     var consentManager: CMPConsentTool?
-    
+
     override func supportedEvents() -> [String]! {
         return ["onOpen", "onClose", "onNotOpened", "onError", "onButtonClicked"]
     }
-    
+
     override static func moduleName() -> String! {
         return "Consentmanager"
     }
 
-    
+
     @objc(createInstance:domain:appName:language:)
     func createInstance(_ id: String, domain: String, appName: String, language: String) {
         // Configure CMPConfig here
         DispatchQueue.main.async {
             // It is crucial that all UI related code be called on the main thread
-            let presentedViewController = RCTPresentedViewController()
-            self.consentManager = CMPConsentTool.init(domain, addId: id, addAppName: appName, addLanguage: language, add: presentedViewController)
+            self.consentManager = CMPConsentTool.init(domain, addId: id, addAppName: appName, addLanguage: language)
             self.setCallbacks()
         }
     }
-    
+
     @objc(open)
     func open() {
         DispatchQueue.main.async {
@@ -78,9 +77,9 @@ class Consentmanager: RCTEventEmitter {
         let cmpString = CMPConsentTool.exportCmpString()
         resolve(cmpString)
     }
-    
+
     //pragma mark Getter
-    
+
     @objc(hasConsent:rejecter:)
     func hasConsent(resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
         let hasConsent = consentManager?.hasConsent()
@@ -135,13 +134,13 @@ class Consentmanager: RCTEventEmitter {
         resolve(googleAC)
     }
 
-    
+
     // This method is required to be exported by React Native
     @objc
     override static func requiresMainQueueSetup() -> Bool {
       return true
     }
-    
+
     private func stringFromCmpButtonEvent(type: CmpButtonEvent) -> String {
         switch type {
         case .unknown:
@@ -158,7 +157,7 @@ class Consentmanager: RCTEventEmitter {
             return "unknown"
         }
     }
-    
+
     private func stringFromErrorType(type: CmpErrorType) -> String {
         switch type {
         case .consentDataReadWriteError:
