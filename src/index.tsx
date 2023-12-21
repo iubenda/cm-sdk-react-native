@@ -1,5 +1,5 @@
 import { NativeModules, NativeEventEmitter, Platform } from 'react-native';
-import type { CmpConfig, CmpEventCallbacks } from './CmpTypes';
+import type { CmpConfig, CmpEventCallbacks, CmpImportResult } from './CmpTypes';
 
 const LINKING_ERROR =
   `The package 'cmp-sdk' doesn't seem to be linked. Make sure: \n\n` +
@@ -31,10 +31,13 @@ export const Consentmanager = {
     RNConsentmanager.createInstanceByConfig(config);
   },
   initialize: () => {
-    RNConsentmanager.initialize();
+    RNConsentmanager.initializeCmp();
   },
-  openConsentlayer: () => {
+  openConsentLayer: () => {
     RNConsentmanager.open();
+  },
+  openConsentLayerOnCheck: () => {
+    RNConsentmanager.openConsentLayerOnCheck();
   },
   addEventListeners: (customCallbacks: CmpEventCallbacks = {}) => {
     const {
@@ -67,6 +70,32 @@ export const Consentmanager = {
       onErrorListener.remove();
       onButtonClickedListener.remove();
     };
+  },
+  getLastATTRequestDate: (): Promise<Date> => {
+    return new Promise((resolve, reject) => {
+      if (Platform.OS === 'ios') {
+        RNConsentmanager.getLastATTRequestDate()
+          .then((timestamp: number) => {
+            const date = new Date(timestamp * 1000); // Convert to milliseconds
+            resolve(date);
+          })
+          .catch((error: string) => reject(error));
+      } else {
+        console.warn('getLastATTRequestDate is not available on this platform');
+        reject('Function not available on this platform');
+      }
+    });
+  },
+
+  requestATTPermission: () => {
+    if (Platform.OS === 'ios') {
+      RNConsentmanager.requestATTPermission();
+    } else {
+      console.warn('requestATTPermission is not available on this platform');
+    }
+  },
+  importCmpString: (cmpString: String): Promise<CmpImportResult> => {
+    return RNConsentmanager.importCmpString(cmpString);
   },
   hasVendor: (id: String): Promise<Boolean> => {
     return RNConsentmanager.hasVendor(id);

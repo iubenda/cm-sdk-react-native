@@ -5,8 +5,16 @@
 @interface RCT_EXTERN_MODULE (Consentmanager, RCTEventEmitter)
 
 RCT_EXTERN_METHOD(createInstance:(NSString *)id domain:(NSString *)domain appName:(NSString *)appName language:(NSString *)language)
+RCT_EXTERN_METHOD(createInstanceByConfig:(NSDictionary *)config)
 RCT_EXTERN_METHOD(open)
-RCT_EXTERN_METHOD(initialize)
+RCT_EXTERN_METHOD(setCallbacks)
+RCT_EXTERN_METHOD(initializeCmp)
+RCT_EXTERN_METHOD(getLastATTRequestDate:(RCTPromiseResolveBlock)resolve
+                                    rejecter:(RCTPromiseRejectBlock)reject)
+
+RCT_EXTERN_METHOD(requestATTPermission)
+RCT_EXTERN_METHOD(openConsentLayerOnCheck)
+RCT_EXTERN_METHOD(importCmpString:(NSString *)cmpString resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 RCT_EXTERN_METHOD(hasVendor:(NSString *)id resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 RCT_EXTERN_METHOD(hasPurpose:(NSString *)id resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 RCT_EXTERN_METHOD(reset)
