@@ -9,22 +9,14 @@ import com.facebook.react.bridge.ReadableMap
 import com.facebook.react.bridge.WritableMap
 import com.facebook.react.modules.core.DeviceEventManagerModule
 
-import net.consentmanager.sdk.CMPConsentTool
-import net.consentmanager.sdk.common.CmpError
-import net.consentmanager.sdk.common.callbacks.OnCMPNotOpenedCallback
-import net.consentmanager.sdk.common.callbacks.OnCloseCallback
-import net.consentmanager.sdk.common.callbacks.OnCmpButtonClickedCallback
-import net.consentmanager.sdk.common.callbacks.OnCmpLayerOpenCallback
-import net.consentmanager.sdk.common.callbacks.OnErrorCallback
-import net.consentmanager.sdk.common.callbacks.OnOpenCallback
-import net.consentmanager.sdk.consentlayer.model.CMPConfig
-import net.consentmanager.sdk.consentlayer.model.valueObjects.CmpButtonEvent
+import net.consentmanager.sdk.CmpManager
+import net.consentmanager.sdk.consentlayer.model.CmpConfig
 import org.json.JSONArray
 import java.lang.Exception
 
 class CmpSdkModule(reactContext: ReactApplicationContext) :
   ReactContextBaseJavaModule(reactContext) {
-  private var consentManager : CMPConsentTool? = null
+  private var consentManager : CmpManager? = null
   private var listenerCount = 0
   override fun getName(): String {
     return NAME
@@ -32,12 +24,12 @@ class CmpSdkModule(reactContext: ReactApplicationContext) :
 
   @ReactMethod
   fun createInstance(id: String, domain: String, appName : String, language: String) {
-    CMPConfig.id = id
-    CMPConfig.domain = domain
-    CMPConfig.appName = appName
-    CMPConfig.language = language
-    CMPConfig.timeout = 5000
-    consentManager = CMPConsentTool.createInstance(reactApplicationContext, CMPConfig)
+    CmpConfig.id = id
+    CmpConfig.domain = domain
+    CmpConfig.appName = appName
+    CmpConfig.language = language
+    CmpConfig.timeout = 5000
+    consentManager = CmpManager.createInstance(reactApplicationContext, CmpConfig)
     setCallbacks()
   }
   @ReactMethod
@@ -54,25 +46,26 @@ class CmpSdkModule(reactContext: ReactApplicationContext) :
     val isDebugMode = config.getBoolean("isDebugMode")
 
     if (id != null) {
-      CMPConfig.id = id
+      CmpConfig.id = id
     }
 
-    CMPConfig.domain = domain
-    CMPConfig.appName = appName
-    CMPConfig.language = language
-    CMPConfig.gaid = idfaOrGaid
-    CMPConfig.timeout = timeout
-    CMPConfig.jumpToSettingsPage = jumpToSettingsPage
+    CmpConfig.domain = domain
+    CmpConfig.appName = appName
+    CmpConfig.language = language
+    CmpConfig.gaid = idfaOrGaid
+    CmpConfig.timeout = timeout
+    CmpConfig.jumpToSettingsPage = jumpToSettingsPage
 
     if (dialogBgColor != null) {
-      CMPConfig.dialogBgColor = dialogBgColor
+      CmpConfig.dialogBgColor = dialogBgColor
     }
-    CMPConfig.designId = designId?.toInt()
-    CMPConfig.isDebugMode = isDebugMode
+    CmpConfig.designId = designId?.toInt()
+    CmpConfig.isDebugMode = isDebugMode
 
-    consentManager = CMPConsentTool.createInstance(reactApplicationContext, CMPConfig)
+    consentManager = CmpManager.createInstance(reactApplicationContext, CmpConfig)
     setCallbacks()
   }
+
   @ReactMethod
   fun setCallbacks() {
     consentManager?.setCallbacks(
@@ -89,15 +82,48 @@ class CmpSdkModule(reactContext: ReactApplicationContext) :
        map.putString("buttonType", event.toString())
        emitEvent("onButtonClicked", map) })
   }
+
+  @ReactMethod
+  fun importCmpString(cmpString: String, promise: Promise) {
+    consentManager?.importCmpString(cmpString) { success, message ->
+      // Prepare the payload
+      val payload = Arguments.createMap().apply {
+        putBoolean("success", success)
+        putString("message", message)
+      }
+
+      // Resolve or reject the promise based on the success flag
+      if (success) {
+        promise.resolve(payload)
+      } else {
+        promise.reject(Throwable(message))
+      }
+    } ?: run {
+      // Handle the case where consentManager is null
+      promise.reject(Throwable("ConsentManager is not initialized"))
+    }
+  }
+
+
+  @ReactMethod
+  fun initializeCmp() {
+    consentManager?.initialize(reactApplicationContext)
+  }
+
+ @ReactMethod
+  fun openConsentLayerOnCheck() {
+    consentManager?.checkAndOpenConsentLayer(reactApplicationContext)
+  }
+
   @ReactMethod
   fun open() {
-    consentManager?.openCmpConsentToolView(reactApplicationContext)
+    consentManager?.openConsentLayer(reactApplicationContext)
   }
 
   @ReactMethod
   fun hasVendor(id: String, promise: Promise) {
     try {
-      promise.resolve(consentManager?.hasVendorConsent(reactApplicationContext, id, false)!!)
+      promise.resolve(consentManager?.hasVendorConsent(id)!!)
     } catch (e: Exception) {
       promise.reject(e)
     }
@@ -106,9 +132,7 @@ class CmpSdkModule(reactContext: ReactApplicationContext) :
   @ReactMethod
   fun hasPurpose(id: String, promise: Promise) {
     try {
-      promise.resolve(consentManager?.hasPurposeConsent(reactApplicationContext, id,
-        isIABPurpose = false,
-        checkConsent = false
+      promise.resolve(consentManager?.hasPurposeConsent(id
       )!!)
     } catch (e: Exception) {
       promise.reject(e)
@@ -128,13 +152,13 @@ class CmpSdkModule(reactContext: ReactApplicationContext) :
   // Getter
   @ReactMethod
   fun reset() {
-    CMPConsentTool.reset(reactApplicationContext)
+    CmpManager.reset(reactApplicationContext)
   }
 
   @ReactMethod
   fun getAllVendors(promise: Promise) {
     try {
-      val jsonList = convertListToJson(consentManager?.getAllVendorsList(reactApplicationContext)!!)
+      val jsonList = convertListToJson(consentManager?.getAllVendorsList()!!)
       promise.resolve(jsonList)
     } catch (e: Exception) {
       promise.reject(e)
@@ -144,7 +168,7 @@ class CmpSdkModule(reactContext: ReactApplicationContext) :
   @ReactMethod
   fun getAllPurposes(promise: Promise) {
     try {
-      val jsonList = convertListToJson(consentManager?.getAllPurposeList(reactApplicationContext)!!)
+      val jsonList = convertListToJson(consentManager?.getAllPurposeList()!!)
       promise.resolve(jsonList)
     } catch (e: Exception) {
       promise.reject(e)
@@ -163,7 +187,7 @@ class CmpSdkModule(reactContext: ReactApplicationContext) :
   @ReactMethod
   fun getEnabledPurposes(promise: Promise) {
     try {
-      val enabledPurposeList = consentManager?.getEnabledPurposeList(reactApplicationContext)!!
+      val enabledPurposeList = consentManager?.getEnabledPurposeList()!!
       val jsonList = convertListToJson(enabledPurposeList)
       promise.resolve(jsonList)
     } catch (e: Exception) {
@@ -174,7 +198,7 @@ class CmpSdkModule(reactContext: ReactApplicationContext) :
   @ReactMethod
   fun getEnabledVendors(promise: Promise) {
     try {
-      val enabledVendorList = consentManager?.getEnabledVendorList(reactApplicationContext)!!
+      val enabledVendorList = consentManager?.getEnabledVendorList()!!
       val jsonList = convertListToJson(enabledVendorList)
       promise.resolve(jsonList)
     } catch (e: Exception) {
@@ -185,7 +209,7 @@ class CmpSdkModule(reactContext: ReactApplicationContext) :
   @ReactMethod
   fun getDisabledPurposes(promise: Promise) {
     try {
-      val disabledPurposeList = consentManager?.getDisabledPurposes(reactApplicationContext)!!
+      val disabledPurposeList = consentManager?.getDisabledPurposes()!!
       val jsonList = convertListToJson(disabledPurposeList)
       promise.resolve(jsonList)
     } catch (e: Exception) {
@@ -195,7 +219,7 @@ class CmpSdkModule(reactContext: ReactApplicationContext) :
   @ReactMethod
   fun getDisabledVendors(promise: Promise) {
     try {
-      val disabledVendorList = consentManager?.getDisabledVendors(reactApplicationContext)!!
+      val disabledVendorList = consentManager?.getDisabledVendors()!!
       val jsonList = convertListToJson(disabledVendorList)
       promise.resolve(jsonList)
     } catch (e: Exception) {
@@ -206,7 +230,7 @@ class CmpSdkModule(reactContext: ReactApplicationContext) :
   @ReactMethod
   fun getUSPrivacyString(promise: Promise) {
     try {
-      val usPrivacyString = consentManager?.getUSPrivacyString(reactApplicationContext) ?: ""
+      val usPrivacyString = consentManager?.getUSPrivacyString() ?: ""
       promise.resolve(usPrivacyString)
     } catch (e: Exception) {
       promise.reject("ERROR", "Failed to get US privacy string: ${e.localizedMessage}")
@@ -216,7 +240,7 @@ class CmpSdkModule(reactContext: ReactApplicationContext) :
   @ReactMethod
   fun getGoogleACString(promise: Promise) {
     try {
-      val googleACString = consentManager?.getGoogleACString(reactApplicationContext) ?: ""
+      val googleACString = consentManager?.getGoogleACString() ?: ""
       promise.resolve(googleACString)
     } catch (e: Exception) {
       promise.reject("ERROR", "Failed to get US privacy string: ${e.localizedMessage}")
@@ -246,7 +270,6 @@ class CmpSdkModule(reactContext: ReactApplicationContext) :
   private fun convertListToJson(list: List<String>): String {
     return JSONArray(list).toString()
   }
-
 
   companion object {
     const val NAME = "Consentmanager"
