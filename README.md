@@ -122,6 +122,14 @@ Refer to the SDK documentation for detailed information on these methods.
 
 Remember to replace placeholders like 'yourID', 'yourDomain', etc., with actual values relevant to the users of your SDK. You can also expand each section with more detailed examples if needed.
 
+## Jest mocks
+When running jest, you can pass our mock
+```js
+jest.mock('cmp-sdk', () =>
+  require('cmp-sdk/jest/mock'),
+);
+```
+
 ## Contributing
 
 See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
