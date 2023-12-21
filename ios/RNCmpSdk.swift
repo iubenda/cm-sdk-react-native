@@ -16,14 +16,20 @@ class Consentmanager: RCTEventEmitter {
         return "Consentmanager"
     }
 
-
     @objc(createInstance:domain:appName:language:)
     func createInstance(_ id: String, domain: String, appName: String, language: String) {
         // Configure CMPConfig here
         DispatchQueue.main.async {
             // It is crucial that all UI related code be called on the main thread
-            self.consentManager = CMPConsentTool.init(domain, addId: id, addAppName: appName, addLanguage: language)
-            self.setCallbacks()
+             self.consentManager = CMPConsentTool
+            // self.setCallbacks()
+        }
+    }
+
+    @objc(initialize)
+    func initialize() {
+        DispatchQueue.main.async {
+             self.consentManager?.initialize()
         }
     }
 
@@ -127,6 +133,7 @@ class Consentmanager: RCTEventEmitter {
         let usPrivacyString = consentManager?.getUSPrivacyString()
         resolve(usPrivacyString)
     }
+
 
     @objc(getGoogleACString:rejecter:)
     func getGoogleACString(resolver resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {

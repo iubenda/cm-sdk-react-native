@@ -73,6 +73,7 @@ class CmpSdkModule(reactContext: ReactApplicationContext) :
     consentManager = CMPConsentTool.createInstance(reactApplicationContext, CMPConfig)
     setCallbacks()
   }
+
   @ReactMethod
   fun setCallbacks() {
     consentManager?.setCallbacks(
@@ -89,6 +90,12 @@ class CmpSdkModule(reactContext: ReactApplicationContext) :
        map.putString("buttonType", event.toString())
        emitEvent("onButtonClicked", map) })
   }
+
+  @ReactMethod
+  fun initialize() {
+    consentManager?.initialize(reactApplicationContext)
+  }
+
   @ReactMethod
   fun open() {
     consentManager?.openCmpConsentToolView(reactApplicationContext)

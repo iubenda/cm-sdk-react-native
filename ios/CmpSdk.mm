@@ -6,6 +6,7 @@
 
 RCT_EXTERN_METHOD(createInstance:(NSString *)id domain:(NSString *)domain appName:(NSString *)appName language:(NSString *)language)
 RCT_EXTERN_METHOD(open)
+RCT_EXTERN_METHOD(initialize)
 RCT_EXTERN_METHOD(hasVendor:(NSString *)id resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 RCT_EXTERN_METHOD(hasPurpose:(NSString *)id resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 RCT_EXTERN_METHOD(reset)

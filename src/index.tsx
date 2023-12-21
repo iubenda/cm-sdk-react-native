@@ -30,6 +30,9 @@ export const Consentmanager = {
   createInstanceByConfig: (config: CmpConfig) => {
     RNConsentmanager.createInstanceByConfig(config);
   },
+  initialize: () => {
+    RNConsentmanager.initialize();
+  },
   openConsentlayer: () => {
     RNConsentmanager.open();
   },
