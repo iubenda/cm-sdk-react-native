@@ -18,7 +18,7 @@ RCT_EXTERN_METHOD(importCmpString:(NSString *)cmpString resolver:(RCTPromiseReso
 RCT_EXTERN_METHOD(hasVendor:(NSString *)id resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 RCT_EXTERN_METHOD(hasPurpose:(NSString *)id resolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 RCT_EXTERN_METHOD(reset)
-RCT_EXTERN_METHOD(exportCmpStringWithResolver:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXTERN_METHOD(exportCmpString:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 RCT_EXTERN_METHOD(hasConsent:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 RCT_EXTERN_METHOD(getAllVendors:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)
 RCT_EXTERN_METHOD(getAllPurposes:(RCTPromiseResolveBlock)resolve rejecter:(RCTPromiseRejectBlock)reject)

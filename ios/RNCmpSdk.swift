@@ -65,7 +65,7 @@ class Consentmanager: RCTEventEmitter {
             self.setCallbacks()
         }
     }
-    
+
     @objc(importCmpString:resolver:rejecter:)
     func importCmpString(cmpString: String, resolver: @escaping RCTPromiseResolveBlock, rejecter: @escaping RCTPromiseRejectBlock) {
         DispatchQueue.main.async {
@@ -77,18 +77,18 @@ class Consentmanager: RCTEventEmitter {
                     let error = NSError(domain: "", code: 200, userInfo: [NSLocalizedDescriptionKey: message ?? "No Message"])
                     rejecter("E_IMPORT_FAILED", message, error)
                 }
-                
+
             })
         }
       }
-    
+
     @objc(openConsentLayerOnCheck)
     func openConsentLayerOnCheck() {
         DispatchQueue.main.async {
             self.consentManager?.checkAndOpenConsentLayer()
         }
     }
-    
+
     @objc(getLastATTRequestDate:rejecter:)
     func getLastATTRequestDate(_ resolve: @escaping RCTPromiseResolveBlock,
                                rejecter reject: @escaping RCTPromiseRejectBlock) {
@@ -101,7 +101,7 @@ class Consentmanager: RCTEventEmitter {
             reject("NO_DATE", "Date not available", nil)
         }
     }
-    
+
     @objc(requestATTPermission)
     func requestATTPermission() {
         if #available(iOS 14, *) {
@@ -116,7 +116,7 @@ class Consentmanager: RCTEventEmitter {
     @objc(initializeCmp)
     func initializeCmp() {
         DispatchQueue.main.async {
-             self.consentManager?.initialize()
+            self.consentManager?.initialize()
         }
     }
 
