@@ -18,7 +18,7 @@ export default function App() {
   React.useEffect(() => {
     const config: CmpConfig = new CmpConfig({
       isAutomaticATTrackingRequest: true,
-      id: 'ac6777c3b1d55',
+      id: 'xxxx',
       domain: 'delivery.consentmanager.net',
       appName: 'test',
       language: 'en',

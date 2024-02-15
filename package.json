@@ -39,13 +39,13 @@
     "ios",
     "android"
   ],
-  "repository": "https://github.com/skander-iubenda/cm-sdk-react-native",
+  "repository": "https://github.com/skander/cm-sdk-react-native",
   "author": "Skander Ben Abdelmalak <skander@iubenda.com> (https://github.com/skander-iubenda)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/skander-iubenda/cm-sdk-react-native/issues"
+    "url": "https://github.com/skander/cm-sdk-react-native/issues"
   },
-  "homepage": "https://github.com/skander-iubenda/cm-sdk-react-native#readme",
+  "homepage": "https://github.com/skander/cm-sdk-react-native#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
