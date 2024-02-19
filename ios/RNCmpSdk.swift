@@ -272,7 +272,90 @@ class Consentmanager: RCTEventEmitter {
         case .unknownError:
             return "unknownError"
         @unknown default:
-            return "unkonwnError"
+            return "unknownError"
         }
+    }
+
+
+    func configureFullScreen(consentManager: CMPConsentTool) {
+         consentManager.withCmpViewControllerConfigurationBlock({ viewController in
+            viewController?.modalPresentationStyle = .fullScreen
+        })
+    }
+    func configureHalfScreenBottom(consentManager: CMPConsentTool)  {
+        consentManager.withCmpViewConfigurationBlock({ uiView in
+            guard let uiView = uiView, let superview = uiView.superview else { return }
+            uiView.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                uiView.heightAnchor.constraint(equalToConstant: superview.frame.size.height / 2),
+                uiView.leadingAnchor.constraint(equalTo: superview.leadingAnchor),
+                uiView.trailingAnchor.constraint(equalTo: superview.trailingAnchor),
+                uiView.bottomAnchor.constraint(equalTo: superview.bottomAnchor)
+            ])
+        })
+    }
+
+    func configureHalfScreenTop(consentManager: CMPConsentTool) {
+        consentManager.withCmpViewConfigurationBlock({ uiView in
+            guard let uiView = uiView, let superview = uiView.superview else { return }
+            uiView.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                uiView.heightAnchor.constraint(equalToConstant: superview.frame.size.height / 2),
+                uiView.leadingAnchor.constraint(equalTo: superview.leadingAnchor),
+                uiView.trailingAnchor.constraint(equalTo: superview.trailingAnchor),
+                uiView.topAnchor.constraint(equalTo: superview.topAnchor)
+            ])
+        })
+    }
+
+    func configureCenterScreen(consentManager: CMPConsentTool, widthRatio: CGFloat = 0.9, heightRatio: CGFloat = 0.8) {
+        consentManager.withCmpViewConfigurationBlock({ uiView in
+            guard let uiView = uiView, let superview = uiView.superview else { return }
+            uiView.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                uiView.widthAnchor.constraint(equalTo: superview.widthAnchor, multiplier: widthRatio),
+                uiView.heightAnchor.constraint(equalTo: superview.heightAnchor, multiplier: heightRatio),
+                uiView.centerXAnchor.constraint(equalTo: superview.centerXAnchor),
+                uiView.centerYAnchor.constraint(equalTo: superview.centerYAnchor)
+            ])
+        })
+    }
+    func configureSmallCenterScreen(consentManager: CMPConsentTool) {
+        consentManager.withCmpViewConfigurationBlock({ uiView in
+            guard let uiView = uiView, let superview = uiView.superview else { return }
+            let widthRatio: CGFloat = 0.8
+            let heightRatio: CGFloat = 0.4 // Assuming a smaller height for "small"
+            uiView.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                uiView.widthAnchor.constraint(equalTo: superview.widthAnchor, multiplier: widthRatio),
+                uiView.heightAnchor.constraint(equalTo: superview.widthAnchor, multiplier: heightRatio), // Height relative to the width of the superview for consistent aspect ratio
+                uiView.centerXAnchor.constraint(equalTo: superview.centerXAnchor),
+                uiView.centerYAnchor.constraint(equalTo: superview.centerYAnchor)
+            ])
+        })
+    }
+    func configureLargeTopScreen(consentManager: CMPConsentTool) {
+        consentManager.withCmpViewConfigurationBlock({ uiView in
+            guard let uiView = uiView, let superview = uiView.superview else { return }
+            uiView.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                uiView.topAnchor.constraint(equalTo: superview.topAnchor),
+                uiView.leadingAnchor.constraint(equalTo: superview.leadingAnchor),
+                uiView.trailingAnchor.constraint(equalTo: superview.trailingAnchor),
+                uiView.heightAnchor.constraint(equalTo: superview.heightAnchor, multiplier: 0.75) // 75% of the superview's height
+            ])
+        })
+    }
+    func configureLargeBottomScreen(consentManager: CMPConsentTool) {
+        consentManager.withCmpViewConfigurationBlock({ uiView in
+            guard let uiView = uiView, let superview = uiView.superview else { return }
+            uiView.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                uiView.bottomAnchor.constraint(equalTo: superview.bottomAnchor),
+                uiView.leadingAnchor.constraint(equalTo: superview.leadingAnchor),
+                uiView.trailingAnchor.constraint(equalTo: superview.trailingAnchor),
+                uiView.heightAnchor.constraint(equalTo: superview.heightAnchor, multiplier: 0.75) // 75% of the superview's height
+            ])
+        })
     }
 }
