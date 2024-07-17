@@ -7,7 +7,7 @@
 RCT_EXTERN_METHOD(createInstance:(NSString *)id domain:(NSString *)domain appName:(NSString *)appName language:(NSString *)language)
 RCT_EXTERN_METHOD(createInstanceByConfig:(NSDictionary *)config)
 RCT_EXTERN_METHOD(open)
-RCT_EXTERN_METHOD(setCallbacks)
+RCT_EXTERN_METHOD(addEventListeners)
 RCT_EXTERN_METHOD(initializeCmp)
 RCT_EXTERN_METHOD(getLastATTRequestDate:(RCTPromiseResolveBlock)resolve
                                     rejecter:(RCTPromiseRejectBlock)reject)

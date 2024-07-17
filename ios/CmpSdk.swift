@@ -9,7 +9,7 @@ class Consentmanager: RCTEventEmitter {
     var consentManager: CmpManager?
 
     override func supportedEvents() -> [String]! {
-        return ["onOpen", "onClose", "onNotOpened", "onError", "onButtonClicked"]
+        return ["onOpen", "onClose", "onNotOpened", "onError", "onButtonClicked", "onGoogleConsentUpdated"]
     }
 
     override static func moduleName() -> String! {
@@ -23,7 +23,7 @@ class Consentmanager: RCTEventEmitter {
         // Configure CMPConfig here
         DispatchQueue.main.async {
             self.consentManager = CmpManager.init(cmpConfig: config)
-            self.setCallbacks()
+            self.addEventListeners()
         }
     }
 
@@ -125,8 +125,8 @@ class Consentmanager: RCTEventEmitter {
         }
     }
 
-    @objc(setCallbacks)
-    func setCallbacks() {
+    @objc(addEventListeners)
+    func addEventListeners() {
         // Setup your consent manager callbacks here
         consentManager?.withOpenListener(
             {
@@ -152,6 +152,11 @@ class Consentmanager: RCTEventEmitter {
             let typeString : String = self.stringFromCmpButtonEvent(type: type)
             let buttonInfo: [String: Any] = ["buttonType": typeString]
             self.sendEvent(withName: "onButtonClicked", body: buttonInfo)
+        })
+        consentManager?.withUpdateGoogleConsent({ [weak self] consentMap in
+            guard let self = self, let consentMap = consentMap else { return }
+            let body: [String: Any] = ["consentMap": consentMap]
+                  sendEvent(withName: "onGoogleConsentUpdated", body: body)
         })
     }
 

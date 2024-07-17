@@ -1,4 +1,9 @@
-import type { CmpEventCallbacks, CmpImportResult } from './types/CmpTypes';
+import type {
+  CmpEventCallbacks,
+  CmpImportResult,
+  GoogleConsentStatus,
+  GoogleConsentType,
+} from './types/CmpTypes';
 import type { CmpConfig } from './CmpConfig';
 import { RNConsentmanager, eventEmitter } from './utils/NativeModuleUtils';
 import { Platform } from 'react-native';
@@ -35,6 +40,9 @@ export const Consentmanager = {
         console.log(`Error: ${type}, Message: ${message}`),
       onButtonClicked = (buttonType) =>
         console.log(`Button clicked: ${buttonType}`),
+      onGoogleConsentUpdated = (
+        consentMap: Record<GoogleConsentType, GoogleConsentStatus>
+      ) => console.log(`Google consent updated: ${JSON.stringify(consentMap)}`),
     }: CmpEventCallbacks = customCallbacks;
 
     const onOpenListener = eventEmitter.addListener('onOpen', onOpen);
@@ -50,12 +58,18 @@ export const Consentmanager = {
       'onButtonClicked',
       (event) => onButtonClicked(event.buttonType)
     );
+
+    const onGoogleConsentUpdatedListener = eventEmitter.addListener(
+      'onGoogleConsentUpdated',
+      (event) => onGoogleConsentUpdated(event.consentMap)
+    );
     return () => {
       onOpenListener.remove();
       onCloseListener.remove();
       onNotOpenListener.remove();
       onErrorListener.remove();
       onButtonClickedListener.remove();
+      onGoogleConsentUpdatedListener.remove();
     };
   },
   getLastATTRequestDate: (): Promise<Date> => {
@@ -128,6 +142,11 @@ export const Consentmanager = {
     RNConsentmanager.configureConsentLayer(screenConfig);
   },
   configurePresentationStyle: (style: PresentationStyle): Promise<void> => {
+    if (Platform.OS !== 'ios') {
+      return Promise.reject(
+        new Error('configurePresentationStyle is only available on iOS')
+      );
+    }
     return RNConsentmanager.configurePresentationStyle(style);
   },
 };

@@ -11,7 +11,11 @@ import {
 } from 'react-native';
 import { Consentmanager } from 'cmp-sdk';
 import { CmpConfig } from '../../src/CmpConfig';
-import type { CmpEventCallbacks } from '../../src/types/CmpTypes';
+import type {
+  CmpEventCallbacks,
+  GoogleConsentStatus,
+  GoogleConsentType,
+} from '../../src/types/CmpTypes';
 import ScreenConfigSelect from './ScreenConfigSelect';
 import type { CmpScreenConfig } from '../../src/types/CmpScreenConfig';
 
@@ -57,6 +61,11 @@ export default function App() {
           (prevLogs) =>
             prevLogs + `Error occurred: ${errorType}:${errorMessage}`
         );
+      },
+      onGoogleConsentUpdated: (
+        consentMap: Record<GoogleConsentType, GoogleConsentStatus>
+      ) => {
+        console.log(`Google consent updated: ${JSON.stringify(consentMap)}`);
       },
     };
 
