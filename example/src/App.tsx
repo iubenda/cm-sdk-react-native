@@ -17,7 +17,8 @@ import type {
   GoogleConsentType,
 } from '../../src/types/CmpTypes';
 import ScreenConfigSelect from './ScreenConfigSelect';
-import type { CmpScreenConfig } from '../../src/types/CmpScreenConfig';
+import { CmpScreenConfig } from '../../src/types/CmpScreenConfig';
+import { CmpIosPresentationStyle } from '../../src/types/CmpIosPresentationStyle';
 
 export default function App() {
   const [consentStatus, setConsentStatus] = React.useState('');
@@ -29,11 +30,13 @@ export default function App() {
   React.useEffect(() => {
     const config: CmpConfig = new CmpConfig({
       isAutomaticATTrackingRequest: true,
-      id: '201',
+      id: '49a2c004f13a4',
       domain: 'delivery.consentmanager.net',
       appName: 'test',
       language: 'en',
       isDebugMode: true,
+      iosPresentationStyle: CmpIosPresentationStyle.OverFullScreen,
+      screenConfig: CmpScreenConfig.HalfScreenTop,
     });
     Consentmanager.createInstanceByConfig(config);
 

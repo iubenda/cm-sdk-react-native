@@ -8,7 +8,7 @@ import type { CmpConfig } from './CmpConfig';
 import { RNConsentmanager, eventEmitter } from './utils/NativeModuleUtils';
 import { Platform } from 'react-native';
 import type { CmpScreenConfig } from './types/CmpScreenConfig';
-import type { PresentationStyle } from './types/CmpIosPresentationStyle';
+import type { CmpIosPresentationStyle } from './types/CmpIosPresentationStyle';
 
 export const Consentmanager = {
   createInstance: (
@@ -141,7 +141,9 @@ export const Consentmanager = {
   configureConsentLayer: (screenConfig: CmpScreenConfig) => {
     RNConsentmanager.configureConsentLayer(screenConfig);
   },
-  configurePresentationStyle: (style: PresentationStyle): Promise<void> => {
+  configurePresentationStyle: (
+    style: CmpIosPresentationStyle
+  ): Promise<void> => {
     if (Platform.OS !== 'ios') {
       return Promise.reject(
         new Error('configurePresentationStyle is only available on iOS')

@@ -1,3 +1,6 @@
+import { CmpIosPresentationStyle } from './types/CmpIosPresentationStyle';
+import { CmpScreenConfig } from './types/CmpScreenConfig';
+
 export class CmpConfig {
   id: string;
   domain: string;
@@ -8,6 +11,8 @@ export class CmpConfig {
   jumpToSettingsPage: boolean;
   isDebugMode: boolean;
   isAutomaticATTrackingRequest: boolean;
+  screenConfig?: CmpScreenConfig;
+  iosPresentationStyle?: CmpIosPresentationStyle;
 
   constructor(config: Partial<CmpConfig>) {
     this.id = config.id!;
@@ -20,5 +25,8 @@ export class CmpConfig {
     this.isDebugMode = config.isDebugMode || false;
     this.isAutomaticATTrackingRequest =
       config.isAutomaticATTrackingRequest || false;
+    this.screenConfig = config.screenConfig || CmpScreenConfig.FullScreen;
+    this.iosPresentationStyle =
+      config.iosPresentationStyle || CmpIosPresentationStyle.None;
   }
 }

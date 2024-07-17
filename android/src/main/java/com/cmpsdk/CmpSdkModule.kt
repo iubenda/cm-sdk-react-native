@@ -33,7 +33,7 @@ class CmpSdkModule(reactContext: ReactApplicationContext) :
     CmpConfig.appName = appName
     CmpConfig.language = language
     CmpConfig.timeout = 5000
-//    CmpConfig.sdkPlatform = sdkPlatform
+    CmpConfig.sdkPlatform = "rn"
     consentManager = CmpManager.createInstance(activity, CmpConfig)
     addEventListeners()
   }

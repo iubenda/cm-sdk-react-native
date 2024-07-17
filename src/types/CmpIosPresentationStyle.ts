@@ -1,4 +1,4 @@
-export enum PresentationStyle {
+export enum CmpIosPresentationStyle {
   FullScreen = 'fullScreen',
   PageSheet = 'pageSheet',
   FormSheet = 'formSheet',
