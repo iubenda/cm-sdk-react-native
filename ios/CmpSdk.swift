@@ -60,7 +60,7 @@ class Consentmanager: RCTEventEmitter {
         }
         DispatchQueue.main.async {
             self.consentManager = CmpManager.init(cmpConfig: cmpConfig)
-            self.setCallbacks()
+            self.addEventListeners()
         }
     }
 

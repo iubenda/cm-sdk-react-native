@@ -53,18 +53,22 @@ export default function App() {
       onButtonClicked: (buttonType: String) => {
         console.log(`Button clicked ${buttonType}`);
         setCallbackLogs(
-          (prevLogs) => prevLogs + `Button clicked ${buttonType}`
+          (prevLogs) => prevLogs + `Button clicked ${buttonType}\n`
         );
       },
       onError: (errorType: String, errorMessage: String) => {
         setCallbackLogs(
           (prevLogs) =>
-            prevLogs + `Error occurred: ${errorType}:${errorMessage}`
+            prevLogs + `Error occurred: ${errorType}:${errorMessage}\n`
         );
       },
       onGoogleConsentUpdated: (
         consentMap: Record<GoogleConsentType, GoogleConsentStatus>
       ) => {
+        setCallbackLogs(
+          (prevLogs) =>
+            prevLogs + `Google consent updated: ${JSON.stringify(consentMap)}\n`
+        );
         console.log(`Google consent updated: ${JSON.stringify(consentMap)}`);
       },
     };
