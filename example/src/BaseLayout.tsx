@@ -1,8 +1,7 @@
 // BaseLayout.tsx
-import React from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 
-const BaseLayout = ({ children }) => {
+const BaseLayout = ({ children }: any) => {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>{children}</View>

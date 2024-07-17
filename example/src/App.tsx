@@ -7,18 +7,25 @@ import {
   StyleSheet,
   View,
   TextInput,
+  Button,
 } from 'react-native';
 import { Consentmanager } from 'cmp-sdk';
-import { CmpConfig, type CmpEventCallbacks } from '../../src/CmpTypes';
+import { CmpConfig } from '../../src/CmpConfig';
+import type { CmpEventCallbacks } from '../../src/types/CmpTypes';
+import ScreenConfigSelect from './ScreenConfigSelect';
+import type { CmpScreenConfig } from '../../src/types/CmpScreenConfig';
 
 export default function App() {
   const [consentStatus, setConsentStatus] = React.useState('');
   const [callbackLogs, setCallbackLogs] = React.useState('');
   const [cmpString, setCmpString] = React.useState('');
+  const [selectedConfig, setSelectedConfig] =
+    React.useState<CmpScreenConfig | null>(null);
+
   React.useEffect(() => {
     const config: CmpConfig = new CmpConfig({
       isAutomaticATTrackingRequest: true,
-      id: 'xxxx',
+      id: '201',
       domain: 'delivery.consentmanager.net',
       appName: 'test',
       language: 'en',
@@ -28,15 +35,19 @@ export default function App() {
 
     const customCallbacks: CmpEventCallbacks = {
       onOpen: () => {
+        console.log('open callback');
         setCallbackLogs((prevLogs) => prevLogs + 'Custom Open Handler\n');
       },
       onClose: () => {
+        console.log('close callback');
         setCallbackLogs((prevLogs) => prevLogs + 'Custom Close Handler\n');
       },
       onNotOpened: () => {
+        console.log('not open callback');
         setCallbackLogs((prevLogs) => prevLogs + 'Custom Not Open Handler\n');
       },
       onButtonClicked: (buttonType: String) => {
+        console.log(`Button clicked ${buttonType}`);
         setCallbackLogs(
           (prevLogs) => prevLogs + `Button clicked ${buttonType}`
         );
@@ -58,6 +69,14 @@ export default function App() {
     };
   }, []);
 
+  const configureLayer = () => {
+    if (selectedConfig) {
+      Consentmanager.configureConsentLayer(selectedConfig);
+    } else {
+      console.warn('Please select a screen configuration');
+    }
+  };
+
   const openConsentLayer = () => {
     Consentmanager.openConsentLayer();
   };
@@ -71,7 +90,7 @@ export default function App() {
 
     const fetchStatus = async (name: String, method: Function) => {
       const result = await method();
-      return `${name}: ${JSON.stringify(result)}`;
+      return `${name}:${JSON.stringify(result)}`;
     };
 
     const statusReport = await Promise.all([
@@ -175,6 +194,11 @@ export default function App() {
           <Text style={styles.buttonText}>Import CMP String</Text>
         </TouchableOpacity>
       </View>
+      <ScreenConfigSelect
+        selectedValue={selectedConfig}
+        onValueChange={setSelectedConfig}
+      />
+      <Button title="Configure Layer" onPress={configureLayer} />
       <View style={styles.buttonGrid}>
         <View style={styles.buttonRow}>
           <TouchableOpacity style={styles.button} onPress={openConsentLayer}>

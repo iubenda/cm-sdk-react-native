@@ -1,12 +1,18 @@
 {
   "name": "cmp-sdk",
-  "version": "0.101.0",
+  "version": "2.5.0",
   "description": "consentmanager react native sdk",
-  "main": "lib/commonjs/index",
-  "module": "lib/module/index",
-  "types": "lib/typescript/src/index.d.ts",
-  "react-native": "src/index",
-  "source": "src/index",
+  "source": "./src/index.tsx",
+  "main": "./lib/commonjs/index.cjs",
+  "module": "./lib/module/index.mjs",
+  "types": "./lib/typescript/src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/typescript/src/index.d.ts",
+      "import": "./lib/module/index.mjs",
+      "require": "./lib/commonjs/index.cjs"
+    }
+  },
   "files": [
     "src",
     "lib",
@@ -52,28 +58,26 @@
   "devDependencies": {
     "@commitlint/config-conventional": "^17.0.2",
     "@evilmartians/lefthook": "^1.5.0",
-    "@react-native/eslint-config": "^0.72.2",
+    "@react-native/eslint-config": "^0.73.1",
     "@release-it/conventional-changelog": "^5.0.0",
-    "@types/jest": "^28.1.2",
-    "@types/react": "~17.0.21",
-    "@types/react-native": "0.70.0",
+    "@types/jest": "^29.5.5",
+    "@types/react": "^18.2.44",
     "commitlint": "^17.0.2",
-    "del-cli": "^5.0.0",
-    "eslint": "^8.4.1",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "jest": "^28.1.1",
-    "pod-install": "^0.1.0",
-    "prettier": "^2.0.5",
+    "del-cli": "^5.1.0",
+    "eslint": "^8.51.0",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "jest": "^29.7.0",
+    "prettier": "^3.0.3",
     "react": "18.2.0",
-    "react-native": "0.72.6",
-    "react-native-builder-bob": "^0.20.0",
+    "react-native": "0.74.3",
+    "react-native-builder-bob": "^0.25.0",
     "release-it": "^15.0.0",
     "turbo": "^1.10.7",
-    "typescript": "^5.0.2"
+    "typescript": "^5.2.2"
   },
   "resolutions": {
-    "@types/react": "17.0.21"
+    "@types/react": "^18.2.44"
   },
   "peerDependencies": {
     "react": "*",
@@ -83,9 +87,6 @@
     "example"
   ],
   "packageManager": "yarn@3.6.1",
-  "engines": {
-    "node": ">= 18.0.0"
-  },
   "jest": {
     "preset": "react-native",
     "modulePathIgnorePatterns": [
@@ -122,6 +123,7 @@
       "prettier"
     ],
     "rules": {
+      "react/react-in-jsx-scope": "off",
       "prettier/prettier": [
         "error",
         {
@@ -149,8 +151,18 @@
     "source": "src",
     "output": "lib",
     "targets": [
-      "commonjs",
-      "module",
+      [
+        "commonjs",
+        {
+          "esm": true
+        }
+      ],
+      [
+        "module",
+        {
+          "esm": true
+        }
+      ],
       [
         "typescript",
         {
@@ -158,5 +170,10 @@
         }
       ]
     ]
+  },
+  "create-react-native-library": {
+    "type": "module-legacy",
+    "languages": "kotlin-swift",
+    "version": "0.38.1"
   }
 }

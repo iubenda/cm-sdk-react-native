@@ -1,29 +1,16 @@
-import { NativeModules, NativeEventEmitter, Platform } from 'react-native';
-import type { CmpConfig, CmpEventCallbacks, CmpImportResult } from './CmpTypes';
+import type { CmpEventCallbacks, CmpImportResult } from './types/CmpTypes';
+import type { CmpConfig } from './CmpConfig';
+import { RNConsentmanager, eventEmitter } from './utils/NativeModuleUtils';
+import { Platform } from 'react-native';
+import type { CmpScreenConfig } from './types/CmpScreenConfig';
+import type { PresentationStyle } from './types/CmpIosPresentationStyle';
 
-const LINKING_ERROR =
-  `The package 'cmp-sdk' doesn't seem to be linked. Make sure: \n\n` +
-  Platform.select({ ios: "- You have run 'pod install'\n", default: '' }) +
-  '- You rebuilt the app after installing the package\n' +
-  '- You are not using Expo Go\n';
-
-const RNConsentmanager = NativeModules.Consentmanager
-  ? NativeModules.Consentmanager
-  : new Proxy(
-      {},
-      {
-        get() {
-          throw new Error(LINKING_ERROR);
-        },
-      }
-    );
-const eventEmitter = new NativeEventEmitter(RNConsentmanager);
 export const Consentmanager = {
   createInstance: (
     id: string,
-    domain: String,
-    appName: String,
-    language: String
+    domain: string,
+    appName: string,
+    language: string
   ) => {
     RNConsentmanager.createInstance(id, domain, appName, language);
   },
@@ -94,47 +81,53 @@ export const Consentmanager = {
       console.warn('requestATTPermission is not available on this platform');
     }
   },
-  importCmpString: (cmpString: String): Promise<CmpImportResult> => {
+  importCmpString: (cmpString: string): Promise<CmpImportResult> => {
     return RNConsentmanager.importCmpString(cmpString);
   },
-  hasVendor: (id: String): Promise<Boolean> => {
-    return RNConsentmanager.hasVendor(id);
+  hasVendor: (id: string, defaultReturn: boolean = true): Promise<boolean> => {
+    return RNConsentmanager.hasVendor(id, defaultReturn);
   },
-  hasPurpose: (id: String): Promise<Boolean> => {
-    return RNConsentmanager.hasPurpose(id);
+  hasPurpose: (id: string, defaultReturn: boolean = true): Promise<boolean> => {
+    return RNConsentmanager.hasPurpose(id, defaultReturn);
   },
   reset: () => {
     RNConsentmanager.reset();
   },
-  exportCmpString: (): Promise<String> => {
+  exportCmpString: (): Promise<string> => {
     return RNConsentmanager.exportCmpString();
   },
   // getter
-  hasConsent: (): Promise<Boolean> => {
+  hasConsent: (): Promise<boolean> => {
     return RNConsentmanager.hasConsent();
   },
-  getAllVendors: (): Promise<String[]> => {
+  getAllVendors: (): Promise<string[]> => {
     return RNConsentmanager.getAllVendors();
   },
-  getAllPurposes: (): Promise<String[]> => {
+  getAllPurposes: (): Promise<string[]> => {
     return RNConsentmanager.getAllPurposes();
   },
-  getEnabledVendors: (): Promise<String[]> => {
+  getEnabledVendors: (): Promise<string[]> => {
     return RNConsentmanager.getEnabledVendors();
   },
-  getEnabledPurposes: (): Promise<String[]> => {
+  getEnabledPurposes: (): Promise<string[]> => {
     return RNConsentmanager.getEnabledPurposes();
   },
-  getDisabledVendors: (): Promise<String[]> => {
+  getDisabledVendors: (): Promise<string[]> => {
     return RNConsentmanager.getDisabledVendors();
   },
-  getDisabledPurposes: (): Promise<String[]> => {
+  getDisabledPurposes: (): Promise<string[]> => {
     return RNConsentmanager.getDisabledPurposes();
   },
-  getUSPrivacyString: (): Promise<String> => {
+  getUSPrivacyString: (): Promise<string> => {
     return RNConsentmanager.getUSPrivacyString();
   },
-  getGoogleACString: (): Promise<String> => {
+  getGoogleACString: (): Promise<string> => {
     return RNConsentmanager.getGoogleACString();
+  },
+  configureConsentLayer: (screenConfig: CmpScreenConfig) => {
+    RNConsentmanager.configureConsentLayer(screenConfig);
+  },
+  configurePresentationStyle: (style: PresentationStyle): Promise<void> => {
+    return RNConsentmanager.configurePresentationStyle(style);
   },
 };

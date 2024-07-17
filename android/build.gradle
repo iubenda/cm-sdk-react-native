@@ -8,10 +8,15 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.android.tools.build:gradle:8.3.0-alpha11'
+    classpath "com.android.tools.build:gradle:7.2.1"
     // noinspection DifferentKotlinGradleVersion
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
   }
+}
+
+def reactNativeArchitectures() {
+  def value = rootProject.getProperties().get("reactNativeArchitectures")
+  return value ? value.split(",") : ["armeabi-v7a", "x86", "x86_64", "arm64-v8a"]
 }
 
 def isNewArchitectureEnabled() {
@@ -88,8 +93,8 @@ dependencies {
   // For < 0.71, this will be from the local maven repo
   // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
   //noinspection GradleDynamicVersion
-  implementation 'net.consentmanager.sdk:android:2.0.2'
-  implementation "com.facebook.react:react-native:0.20.1"
+  implementation 'net.consentmanager.sdk:android:2.5.1'
+  implementation "com.facebook.react:react-native:+"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
 
