@@ -36,7 +36,7 @@ export default function App() {
       language: 'en',
       isDebugMode: true,
       iosPresentationStyle: CmpIosPresentationStyle.OverFullScreen,
-      screenConfig: CmpScreenConfig.HalfScreenTop,
+      screenConfig: CmpScreenConfig.HalfScreenBottom,
     });
     Consentmanager.createInstanceByConfig(config);
 

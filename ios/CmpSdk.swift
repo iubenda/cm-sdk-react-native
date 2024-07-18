@@ -3,7 +3,7 @@ import CmpSdk
 import React
 
 @objc(ConsentManager)
-class ConsentManager: RCTEventEmitter {
+class ConsentManager: CmpEventEmitter {
 
     var cmpManager: CmpManager?
 

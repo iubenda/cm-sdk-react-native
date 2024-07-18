@@ -1,5 +1,6 @@
 package com.cmpsdk
 
+import android.util.Log
 import com.facebook.react.bridge.Arguments
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactApplicationContext
@@ -17,7 +18,6 @@ import org.json.JSONArray
 class CmpSdkModule(reactContext: ReactApplicationContext) :
   ReactContextBaseJavaModule(reactContext) {
   private var consentManager: CmpManager? = null
-  private val sdkPlatform = "rn"
   private var listenerCount = 0
   override fun getName(): String {
     return NAME
@@ -51,7 +51,11 @@ class CmpSdkModule(reactContext: ReactApplicationContext) :
     val timeout = config.getInt("timeout")
     val jumpToSettingsPage = config.getBoolean("jumpToSettingsPage")
     val isDebugMode = config.getBoolean("isDebugMode")
+    val screenConfig = config.getString("screenConfig")
 
+    if (screenConfig != null) {
+      configureConsentLayer(screenConfig)
+    }
     if (id != null) {
       CmpConfig.id = id
     }
@@ -61,6 +65,7 @@ class CmpSdkModule(reactContext: ReactApplicationContext) :
     CmpConfig.language = language
     CmpConfig.gaid = idfaOrGaid
     CmpConfig.timeout = timeout
+    CmpConfig.sdkPlatform = "rn"
     CmpConfig.jumpToSettingsPage = jumpToSettingsPage
     CmpConfig.isDebugMode = isDebugMode
 
@@ -84,10 +89,17 @@ class CmpSdkModule(reactContext: ReactApplicationContext) :
         val map: WritableMap = Arguments.createMap()
         map.putString("buttonType", event.toString())
         emitEvent("onButtonClicked", map)
-      },
-      googleConsentModeListener = {
+      }, googleConsentModeListener = null)
 
-      })
+    consentManager?.withGoogleAnalyticsCallback { consentMap ->
+      val map: WritableMap = Arguments.createMap()
+      val nestedMap: WritableMap = Arguments.createMap()
+      consentMap.forEach { (consentType, consentStatus) ->
+        map.putString(consentType.name.lowercase(), consentStatus.name.lowercase())
+      }
+      nestedMap.putMap("consentMap", map)
+      emitEvent("onGoogleConsentUpdated", nestedMap)
+    }
   }
 
   @ReactMethod
