@@ -40,6 +40,21 @@ You can initialize the CMP SDK using either the direct configuration or a config
   Consentmanager.createInstanceByConfig(yourConfigObject);
   ```
 
+  ```jsx
+import { CmpConfig, CmpScreenConfig, CmpIosPresentationStyle } from 'cmp-sdk/types';
+
+const config = new CmpConfig({
+  id: 'yourID',
+  domain: 'yourDomain',
+  appName: 'yourAppName',
+  language: 'yourLanguage',
+  screenConfig: CmpScreenConfig.FullScreen,
+  iosPresentationStyle: CmpIosPresentationStyle.FullScreen,
+});
+
+Consentmanager.createInstanceByConfig(config);
+  ```
+
 ### Managing Consent Layer
 
 To manage the consent layer:
@@ -57,8 +72,12 @@ Add event listeners to handle various consent-related events:
 const removeListeners = Consentmanager.addEventListeners({
   onOpen: () => console.log('Consent layer opened'),
   onClose: () => console.log('Consent layer closed'),
-  // Add other event handlers as needed
+  onNotOpened: () => console.log('Consent layer not opened'),
+  onError: (type, message) => console.log(`Error: ${type}, Message: ${message}`),
+  onButtonClicked: (buttonType) => console.log(`Button clicked: ${buttonType}`),
+  onGoogleConsentUpdated: (consentMap) => console.log(`Google consent updated: ${JSON.stringify(consentMap)}`),
 });
+
 ```
 
 Remember to remove the event listeners when they are no longer needed:

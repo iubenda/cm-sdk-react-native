@@ -116,8 +116,8 @@ export default function App() {
         })
       ),
       fetchStatus('CmpString', Consentmanager.exportCmpString),
-      fetchStatus('has Purpose 1', () => Consentmanager.hasPurpose('1')),
-      fetchStatus('has Vendor 1', () => Consentmanager.hasVendor('1')),
+      fetchStatus('has Purpose 1', () => Consentmanager.hasPurpose('1', false)),
+      fetchStatus('has Vendor 1', () => Consentmanager.hasVendor('1', true)),
       fetchStatus('has Consent', Consentmanager.hasConsent),
       fetchStatus('all Vendors', Consentmanager.getAllVendors),
       fetchStatus('all Purposes', Consentmanager.getAllPurposes),
