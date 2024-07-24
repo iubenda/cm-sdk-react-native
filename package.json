@@ -45,7 +45,10 @@
     "ios",
     "android"
   ],
-  "repository": "https://github.com/iubenda/cm-sdk-react-native",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iubenda/cm-sdk-react-native.git"
+  },
   "author": "Skander Ben Abdelmalak <skander@iubenda.com> (https://github.com/skander-iubenda)",
   "license": "MIT",
   "bugs": {
