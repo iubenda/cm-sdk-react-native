@@ -2,10 +2,8 @@ import Foundation
 import CmpSdk
 import React
 
-@objc(ConsentManager)
-class ConsentManager: CmpEventEmitter {
-
-    var cmpManager: CmpManager?
+@objc(Consentmanager)
+class Consentmanager: CmpEventEmitter {
 
     override func supportedEvents() -> [String]! {
         return ["onOpen", "onClose", "onNotOpened", "onError", "onButtonClicked", "onGoogleConsentUpdated"]
@@ -31,10 +29,7 @@ class ConsentManager: CmpEventEmitter {
 
     @objc(createInstanceByConfig:)
     func createInstanceByConfig(_ config: NSDictionary) {
-        guard let cmpConfig = CmpConfigManager.setupConfig(from: config) else {
-            print("Invalid or incomplete configuration data. 'id', 'domain', 'appName', and 'language' are required.")
-            return
-        }
+        let cmpConfig = CmpConfigManager.setupConfig(from: config)
         DispatchQueue.main.async {
             self.cmpManager = CmpManager(cmpConfig: cmpConfig)
             self.addEventListeners()
@@ -273,5 +268,93 @@ class ConsentManager: CmpEventEmitter {
                 ])
             }
         })
+    }
+}
+
+// Enum for ScreenConfig
+@objc enum ScreenConfig: Int, CaseIterable {
+    case fullScreen
+    case halfScreenBottom
+    case halfScreenTop
+    case centerScreen
+    case smallCenterScreen
+    case largeTopScreen
+    case largeBottomScreen
+
+    init?(fromString: String) {
+        switch fromString {
+        case "FullScreen":
+            self = .fullScreen
+        case "HalfScreenBottom":
+            self = .halfScreenBottom
+        case "HalfScreenTop":
+            self = .halfScreenTop
+        case "CenterScreen":
+            self = .centerScreen
+        case "SmallCenterScreen":
+            self = .smallCenterScreen
+        case "LargeTopScreen":
+            self = .largeTopScreen
+        case "LargeBottomScreen":
+            self = .largeBottomScreen
+        default:
+            return nil
+        }
+    }
+}
+
+// Enum for PresentationStyle
+@objc enum PresentationStyle: Int, CaseIterable {
+    case fullScreen
+    case pageSheet
+    case formSheet
+    case currentContext
+    case overFullScreen
+    case overCurrentContext
+    case popover
+    case none
+
+    init?(rawValue: String) {
+        switch rawValue {
+        case "fullScreen":
+            self = .fullScreen
+        case "pageSheet":
+            self = .pageSheet
+        case "formSheet":
+            self = .formSheet
+        case "currentContext":
+            self = .currentContext
+        case "overFullScreen":
+            self = .overFullScreen
+        case "overCurrentContext":
+            self = .overCurrentContext
+        case "popover":
+            self = .popover
+        case "none":
+            self = .none
+        default:
+            return nil
+        }
+    }
+
+    func toUIModalPresentationStyle() -> UIModalPresentationStyle {
+        switch self {
+        case .fullScreen:
+            return .fullScreen
+        case .pageSheet:
+            return .pageSheet
+        case .formSheet:
+            return .formSheet
+        case .currentContext:
+            return .currentContext
+        case .overFullScreen:
+            return .overFullScreen
+        case .overCurrentContext:
+            return .overCurrentContext
+        case .popover:
+            return .popover
+        case .none:
+            return .none
+        }
     }
 }
