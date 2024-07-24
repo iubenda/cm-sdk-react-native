@@ -152,3 +152,8 @@ export const Consentmanager = {
     return RNConsentmanager.configurePresentationStyle(style);
   },
 };
+
+export { CmpConfig } from './CmpConfig';
+export { CmpIosPresentationStyle } from './types/CmpIosPresentationStyle';
+export { CmpScreenConfig } from './types/CmpScreenConfig';
+export * from './types/CmpTypes';

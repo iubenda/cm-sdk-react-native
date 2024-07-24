@@ -9,16 +9,18 @@ import {
   TextInput,
   Button,
 } from 'react-native';
-import { Consentmanager } from 'cmp-sdk';
-import { CmpConfig } from '../../src/CmpConfig';
+import {
+  Consentmanager,
+  CmpConfig,
+  CmpScreenConfig,
+  CmpIosPresentationStyle,
+} from 'cmp-sdk';
 import type {
   CmpEventCallbacks,
   GoogleConsentStatus,
   GoogleConsentType,
-} from '../../src/types/CmpTypes';
+} from 'cmp-sdk';
 import ScreenConfigSelect from './ScreenConfigSelect';
-import { CmpScreenConfig } from '../../src/types/CmpScreenConfig';
-import { CmpIosPresentationStyle } from '../../src/types/CmpIosPresentationStyle';
 
 export default function App() {
   const [consentStatus, setConsentStatus] = React.useState('');
