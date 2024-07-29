@@ -36,7 +36,7 @@ class Consentmanager: CmpEventEmitter {
             if let screenConfigString = config["screenConfig"] as? String {
                 self.configureConsentLayer(screenConfigString)
             }
-            if let presentationStyleString = config["presentationStyle"] as? String {
+            if let presentationStyleString = config["iosPresentationStyle"] as? String {
                 self.setPresentationStyle(style: presentationStyleString)
             }
         }
