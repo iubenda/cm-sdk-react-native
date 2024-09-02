@@ -1,6 +1,6 @@
 {
   "name": "cmp-sdk",
-  "version": "2.6.1",
+  "version": "2.6.2",
   "description": "consentmanager react native sdk",
   "source": "./src/index.tsx",
   "main": "./lib/commonjs/index.cjs",
