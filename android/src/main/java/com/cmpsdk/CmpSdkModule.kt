@@ -126,7 +126,10 @@ class CmpSdkModule(reactContext: ReactApplicationContext) :
 
   @ReactMethod
   fun initializeCmp() {
-    consentManager?.initialize(reactApplicationContext)
+    val activity = currentActivity
+      ?: // Handle the case where the activity is null
+      throw IllegalStateException("Activity is null. Cannot open consent layer.")
+    consentManager?.initialize(activity)
   }
 
   @ReactMethod
@@ -283,7 +286,7 @@ class CmpSdkModule(reactContext: ReactApplicationContext) :
     val config = ScreenConfig.valueOf(screenConfig)
     when (config) {
       ScreenConfig.FullScreen -> CmpUIConfig.configureFullScreen()
-      ScreenConfig.HalfScreenBottom -> CmpUIConfig.configureHalfScreenTop(reactApplicationContext)
+      ScreenConfig.HalfScreenBottom -> CmpUIConfig.configureHalfScreenBottom(reactApplicationContext)
       ScreenConfig.HalfScreenTop -> CmpUIConfig.configureHalfScreenTop(reactApplicationContext)
       ScreenConfig.CenterScreen -> CmpUIConfig.configureCenterScreen(reactApplicationContext)
       ScreenConfig.SmallCenterScreen -> CmpUIConfig.configureSmallCenterScreen(reactApplicationContext)
