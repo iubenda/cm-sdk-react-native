@@ -14,6 +14,7 @@ import {
   CmpConfig,
   CmpScreenConfig,
   CmpIosPresentationStyle,
+  CmpAndroidPresentationStyle,
 } from 'cmp-sdk';
 import type {
   CmpEventCallbacks,
@@ -38,6 +39,7 @@ export default function App() {
       language: 'en',
       isDebugMode: true,
       iosPresentationStyle: CmpIosPresentationStyle.FullScreen,
+      androidPresentationStyle: CmpAndroidPresentationStyle.DialogWindow,
       screenConfig: CmpScreenConfig.FullScreen,
     });
     Consentmanager.createInstanceByConfig(config);

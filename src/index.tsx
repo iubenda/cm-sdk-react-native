@@ -155,5 +155,6 @@ export const Consentmanager = {
 
 export { CmpConfig } from './CmpConfig';
 export { CmpIosPresentationStyle } from './types/CmpIosPresentationStyle';
+export { CmpAndroidPresentationStyle } from './types/CmpAndroidPresentationStyle';
 export { CmpScreenConfig } from './types/CmpScreenConfig';
 export * from './types/CmpTypes';

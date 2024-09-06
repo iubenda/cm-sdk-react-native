@@ -12,6 +12,7 @@ import com.facebook.react.modules.core.DeviceEventManagerModule
 import net.consentmanager.sdk.CmpManager
 import net.consentmanager.sdk.consentlayer.model.CmpConfig
 import net.consentmanager.sdk.consentlayer.model.CmpUIConfig
+import net.consentmanager.sdk.consentlayer.model.CmpUIStrategy
 import org.json.JSONArray
 
 
@@ -52,7 +53,11 @@ class CmpSdkModule(reactContext: ReactApplicationContext) :
     val jumpToSettingsPage = config.getBoolean("jumpToSettingsPage")
     val isDebugMode = config.getBoolean("isDebugMode")
     val screenConfig = config.getString("screenConfig")
+    val presentationStyle = config.getString("androidPresentationStyle")
 
+    if (presentationStyle != null) {
+      configurePresentationStyle(presentationStyle)
+    }
     if (screenConfig != null) {
       configureConsentLayer(screenConfig)
     }
@@ -282,10 +287,28 @@ class CmpSdkModule(reactContext: ReactApplicationContext) :
   }
 
   @ReactMethod
+  fun configurePresentationStyle(style: String) {
+    val config = PresentationStyle.valueOf(style)
+    when (config) {
+      PresentationStyle.Activity -> {
+        CmpUIConfig.uiStrategy = CmpUIStrategy.ACTIVITY
+      }
+      PresentationStyle.Popup -> {
+        CmpUIConfig.uiStrategy = CmpUIStrategy.POPUP
+      }
+      PresentationStyle.Dialog -> {
+        CmpUIConfig.uiStrategy = CmpUIStrategy.DIALOG
+      }
+    }
+  }
+
+  @ReactMethod
   fun configureConsentLayer(screenConfig: String) {
     val config = ScreenConfig.valueOf(screenConfig)
     when (config) {
-      ScreenConfig.FullScreen -> CmpUIConfig.configureFullScreen()
+      ScreenConfig.FullScreen -> {
+        CmpUIConfig.configureFullScreen()
+      }
       ScreenConfig.HalfScreenBottom -> CmpUIConfig.configureHalfScreenBottom(reactApplicationContext)
       ScreenConfig.HalfScreenTop -> CmpUIConfig.configureHalfScreenTop(reactApplicationContext)
       ScreenConfig.CenterScreen -> CmpUIConfig.configureCenterScreen(reactApplicationContext)
@@ -326,6 +349,13 @@ class CmpSdkModule(reactContext: ReactApplicationContext) :
     const val NAME = "Consentmanager"
 
   }
+}
+
+
+enum class PresentationStyle {
+  Popup,
+  Dialog,
+  Activity
 }
 
 enum class ScreenConfig {

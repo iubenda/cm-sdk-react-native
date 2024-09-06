@@ -1,3 +1,4 @@
+import { CmpAndroidPresentationStyle } from './types/CmpAndroidPresentationStyle';
 import { CmpIosPresentationStyle } from './types/CmpIosPresentationStyle';
 import { CmpScreenConfig } from './types/CmpScreenConfig';
 
@@ -13,6 +14,7 @@ export class CmpConfig {
   isAutomaticATTrackingRequest: boolean;
   screenConfig?: CmpScreenConfig;
   iosPresentationStyle?: CmpIosPresentationStyle;
+  androidPresentationStyle?: CmpAndroidPresentationStyle;
 
   constructor(config: Partial<CmpConfig>) {
     this.id = config.id!;
@@ -28,5 +30,8 @@ export class CmpConfig {
     this.screenConfig = config.screenConfig || CmpScreenConfig.FullScreen;
     this.iosPresentationStyle =
       config.iosPresentationStyle || CmpIosPresentationStyle.None;
+    this.androidPresentationStyle =
+      config.androidPresentationStyle ||
+      CmpAndroidPresentationStyle.PopupWindow;
   }
 }
