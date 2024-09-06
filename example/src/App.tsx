@@ -38,7 +38,7 @@ export default function App() {
       appName: 'test',
       language: 'en',
       isDebugMode: true,
-      iosPresentationStyle: CmpIosPresentationStyle.FullScreen,
+      iosPresentationStyle: CmpIosPresentationStyle.Popover,
       androidPresentationStyle: CmpAndroidPresentationStyle.DialogWindow,
       screenConfig: CmpScreenConfig.FullScreen,
     });

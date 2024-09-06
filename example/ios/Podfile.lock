@@ -1,7 +1,7 @@
 PODS:
   - boost (1.83.0)
-  - cmp-sdk (2.5.0):
-    - CmpSdk (= 2.5.1)
+  - cmp-sdk (2.6.2):
+    - CmpSdk (= 2.5.2)
     - DoubleConversion
     - glog
     - RCT-Folly (= 2024.01.01.00)
@@ -22,7 +22,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - CmpSdk (2.5.1)
+  - CmpSdk (2.5.2)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.74.3)
   - fmt (9.1.0)
@@ -1357,8 +1357,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
-  cmp-sdk: 885d30ad5f280e88e89f1e153021df6fc0206af9
-  CmpSdk: 9603df4060e039d81b6099707380b54e85b77cc5
+  cmp-sdk: 78a8397dd26fda837d4e1ced67b3db7dc3480ff2
+  CmpSdk: 7e08da31970b65def17e54ec1e40e37e8b36826a
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
   FBLazyVector: 7e977dd099937dc5458851233141583abba49ff2
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
